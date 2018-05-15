@@ -63,13 +63,30 @@ class Main extends React.Component {
     }
 
     selectBox = (row, col) => {
-        let gridFullClone = this.state.gridFull.map((arr) => {
-                                           return arr.slice();
-                                        });
+        let gridFullClone = arrayClone(this.state.gridFull);
         gridFullClone[row][col] = !gridFullClone[row][col];
         this.setState({
             gridFull: gridFullClone
         });
+    }
+
+    seed = () => {
+        let gridFullClone = arrayClone(this.state.gridFull);
+        for( let i=0; i< this.rows; i++){
+            for( let j=0; j< this.cols; j++){
+                if(Math.floor(Math.random() * 4) === 1){
+                    gridFullClone[i][j] = true;
+                }
+            }
+        }
+        this.setState({
+            gridFull: gridFullClone
+        });
+    }
+
+
+    componentDidMount(){
+        this.seed();
     }
 
 
@@ -88,6 +105,12 @@ class Main extends React.Component {
         );
         
     }
+}
+
+function arrayClone(array) {
+    return array.map((arr) => {
+        return arr.slice();
+    });
 }
 
 ReactDOM.render(<Main />, document.getElementById('root'));
