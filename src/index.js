@@ -2,18 +2,31 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
+class Box extends React.Component {
+
+    
+    render() {
+        return (
+            <div
+            className = {this.props.boxClass}
+            id = {this.props.id}
+            onClick = { () =>  this.props.selectBox(this.props.row, this.props.col)}
+             />
+        );
+    }
+}
 class Grid extends React.Component {
     render() {
 
-        const width = this.props.cols * 14;
+        const width = (this.props.cols * 16);
         var rowsArr = []
 
-        boxClass = "";
+        var boxClass = "";
         for( var i = 0; i < this.props.rows; i++ ) {
             for ( var j = 0; j < this.props.cols; j++) {
                 let boxId = i + '_' + j;
 
-                boxClass = this.state.gridFull[i][j] ? 'box on' : 'box off';
+                boxClass = this.props.gridFull[i][j] ? "box on" : "box off";
                 rowsArr.push(
                     <Box 
                     boxClass= {boxClass}
@@ -23,12 +36,12 @@ class Grid extends React.Component {
                     col = {j}
                     selectBox = {this.props.selectBox}
                     />
-                )
+                );
             }
         }
         return (
             <div className='grid' style={{ width: width }}>
-            {{ rowsArr }}
+            {rowsArr}
             
             </div>
         );
@@ -56,8 +69,8 @@ class Main extends React.Component {
             <h1>The Game of life</h1>
             <Grid 
                  gridFull= {this.state.gridFull}
-                 rows = {this.state.rows}
-                 cols = {this.state.cols}
+                 rows = {this.rows}
+                 cols = {this.cols}
                  selectBox = {this.selectBox}
             />
             <h2>Generation : { this.state.generation}</h2>
