@@ -4,9 +4,32 @@ import './index.css';
 
 class Grid extends React.Component {
     render() {
+
+        const width = this.props.cols * 14;
+        var rowsArr = []
+
+        boxClass = "";
+        for( var i = 0; i < this.props.rows; i++ ) {
+            for ( var j = 0; j < this.props.cols; j++) {
+                let boxId = i + '_' + j;
+
+                boxClass = this.state.gridFull[i][j] ? 'box on' : 'box off';
+                rowsArr.push(
+                    <Box 
+                    boxClass= {boxClass}
+                    boxId = {boxId}
+                    key = {boxId}
+                    row = {i}
+                    col = {j}
+                    selectBox = {this.props.selectBox}
+                    />
+                )
+            }
+        }
         return (
-            <div>
-            <p>Grid</p>
+            <div className='grid' style={{ width: width }}>
+            {{ rowsArr }}
+            
             </div>
         );
       
@@ -35,6 +58,7 @@ class Main extends React.Component {
                  gridFull= {this.state.gridFull}
                  rows = {this.state.rows}
                  cols = {this.state.cols}
+                 selectBox = {this.selectBox}
             />
             <h2>Generation : { this.state.generation}</h2>
         </div>
