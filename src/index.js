@@ -62,6 +62,16 @@ class Main extends React.Component {
         }
     }
 
+    selectBox = (row, col) => {
+        let gridFullClone = this.state.gridFull.map((arr) => {
+                                           return arr.slice();
+                                        });
+        gridFullClone[row][col] = !gridFullClone[row][col];
+        this.setState({
+            gridFull: gridFullClone
+        });
+    }
+
 
     render() {
         return (
@@ -79,7 +89,6 @@ class Main extends React.Component {
         
     }
 }
-
 
 ReactDOM.render(<Main />, document.getElementById('root'));
 
