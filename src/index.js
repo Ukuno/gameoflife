@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import { ButtonToolbar, MenuItem, DropdownButton } from 'react-bootstrap';
+
 
 class Box extends React.Component {
 
@@ -18,7 +20,7 @@ class Box extends React.Component {
 class Grid extends React.Component {
     render() {
 
-        const width = (this.props.cols * 16);
+        const width = (this.props.cols * 14);
         var rowsArr = []
 
         var boxClass = "";
@@ -48,6 +50,51 @@ class Grid extends React.Component {
       
     }
 }
+
+
+class Buttons extends React.Component {
+
+	handleSelect = (evt) => {
+		this.props.gridSize(evt);
+	}
+
+	render() {
+		return (
+			<div className="center">
+				<ButtonToolbar>
+					<button className="btn btn-default" onClick={this.props.playButton}>
+						Play
+					</button>
+					<button className="btn btn-default" onClick={this.props.pauseButton}>
+					  Pause
+					</button>
+					<button className="btn btn-default" onClick={this.props.clear}>
+					  Clear
+					</button>
+					<button className="btn btn-default" onClick={this.props.slow}>
+					  Slow
+					</button>
+					<button className="btn btn-default" onClick={this.props.fast}>
+					  Fast
+					</button>
+					<button className="btn btn-default" onClick={this.props.seed}>
+					  Seed
+					</button>
+					<DropdownButton
+						title="Grid Size"
+						id="size-menu"
+						onSelect={this.handleSelect}
+					>
+						<MenuItem eventKey="1">20x10</MenuItem>
+						<MenuItem eventKey="2">50x30</MenuItem>
+						<MenuItem eventKey="3">70x50</MenuItem>
+					</DropdownButton>
+				</ButtonToolbar>
+			</div>
+			)
+	}
+}
+
 class Main extends React.Component {
 
     constructor() {
@@ -92,6 +139,42 @@ class Main extends React.Component {
 	pauseButton = () => {
 		clearInterval(this.intervalId);
     }
+
+    slow = () => {
+		this.speed = 1000;
+		this.playButton();
+	}
+
+	fast = () => {
+		this.speed = 100;
+		this.playButton();
+	}
+
+	clear = () => {
+		var grid = Array(this.rows).fill(Array(this.cols).fill(false));
+		this.setState({
+			gridFull: grid,
+			generation: 0
+		});
+	}
+    
+    gridSize = (size) => {
+		switch (size) {
+			case "1":
+				this.cols = 20;
+				this.rows = 10;
+			break;
+			case "2":
+				this.cols = 50;
+				this.rows = 30;
+			break;
+			default:
+				this.cols = 70;
+				this.rows = 50;
+		}
+		this.clear();
+
+    }
     
     play = () => {
 		let g = this.state.gridFull;
@@ -130,6 +213,15 @@ class Main extends React.Component {
         return (
          <div>
             <h1>The Game of life</h1>
+            <Buttons
+					playButton={this.playButton}
+					pauseButton={this.pauseButton}
+					slow={this.slow}
+					fast={this.fast}
+					clear={this.clear}
+					seed={this.seed}
+					gridSize={this.gridSize}
+				/>
             <Grid 
                  gridFull= {this.state.gridFull}
                  rows = {this.rows}
